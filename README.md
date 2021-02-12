@@ -20,6 +20,7 @@ Sign in at `https://www.betfair.com/exchange/plus/`
  - Click on a Market
    - Grab the market ID from the URL `https://www.betfair.com/exchange/plus/football/market/1.178839284` 
      - Export the market ID to your environment `export MARKET_ID=1.178839284`
+  
 Navigate to `https://docs.developer.betfair.com/visualisers/api-ng-account-operations/`
  - Grab your `SSOID` token from the UI
  - Use the API visualiser to `createDeveloperAppKeys`, then gran the `Application Key` using `getDeveloperAppKeys`
@@ -61,6 +62,6 @@ Available at `http://localhost:9081/`
 - Split code into seperate modules
 - Add Tests
 - Add Travis build pipline
-- Helimify for Kubernetes deployment
+- Helmify for Kubernetes deployment
 - Configure Mongo Replica Set for Redundancy & access to the `Change Stream`
 - Forward the change stream events to Kafka as a messaging layer to enable multiple consumers.
