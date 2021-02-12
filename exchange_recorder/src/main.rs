@@ -2,6 +2,7 @@
 #[macro_use]
 extern crate rocket;
 use lazy_static::lazy_static;
+use mongodb::{bson::doc, Client};
 use native_tls::TlsConnector;
 use prometheus::{Encoder, IntCounter, Registry, TextEncoder};
 use std::env;
@@ -45,7 +46,7 @@ async fn subscribe_to_betfair_exchange() {
     let stream_api_host = "stream-api.betfair.com".to_owned();
     let ssoid = env::var("SSOID").unwrap_or("none".to_string());
     let app_key = env::var("APP_KEY").unwrap_or("none".to_string());
-    let event_id = env::var("MARKET_ID").unwrap_or("none".to_string());
+    let market_id = env::var("MARKET_ID").unwrap_or("none".to_string());
 
     let auth_msg = format!(
         "{{\"op\": \"authentication\",\"id\":1, \"appKey\": \"{}\", \"session\": \"{}\"}}\r\n",
@@ -53,7 +54,7 @@ async fn subscribe_to_betfair_exchange() {
     );
     let sub_msg = format!(
         "{{\"op\":\"marketSubscription\",\"id\":1,\"marketFilter\":{{\"marketIds\":[\"{}\"]}}}}\r\n",
-        event_id
+        market_id
     );
     println!("{}", auth_msg);
     println!("{}", sub_msg);
@@ -66,11 +67,22 @@ async fn subscribe_to_betfair_exchange() {
     stream.write_all(auth_msg.as_bytes()).unwrap();
     stream.write_all(sub_msg.as_bytes()).unwrap();
 
+    let client = Client::with_uri_str("mongodb://root:password123@0.0.0.0:27017/")
+        .await
+        .unwrap();
+    let db = client.database("betfair_exchange_db");
+    let coll = db.collection(&market_id);
+
     let mut stream_reader = BufReader::new(stream);
     let mut buf = String::new();
     while stream_reader.read_line(&mut buf).unwrap_or(0) > 0 {
         INCOMING_MESSAGES.inc();
         println!("{}", &buf);
+        let result = match coll.insert_one(doc! { "payload": &buf}, None).await {
+            Ok(_) => Ok("Inserted a document into MongoDB"),
+            Err(e) => Err(e),
+        };
+        println!("{:#?}", result);
         buf = "".to_string();
     }
 }
@@ -78,7 +90,6 @@ async fn subscribe_to_betfair_exchange() {
 #[tokio::main]
 async fn main() {
     register_custom_metrics();
-
     tokio::spawn(async move { start_web_server().await });
-    tokio::spawn(async move { subscribe_to_betfair_exchange().await });
+    subscribe_to_betfair_exchange().await
 }
