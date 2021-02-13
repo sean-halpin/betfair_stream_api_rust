@@ -13,7 +13,7 @@ services:
       - APP_KEY=${APP_KEY}
       - SSOID=${SSOID}
       - MARKET_ID=${MARKET_ID}
-      - MONGO_CONN="mongodb://root:password123@mongodb-primary_1:27017/"
+      - MONGO_CONN=mongodb://root:password123@mongodb-primary:27017/
     depends_on:
       - mongo-express
 
