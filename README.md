@@ -29,7 +29,7 @@ Sign in at `https://www.betfair.com/exchange/plus/`
   
 Navigate to `https://docs.developer.betfair.com/visualisers/api-ng-account-operations/`
  - Grab your `SSOID` token from the UI
- - Use the API visualiser to `createDeveloperAppKeys`, then gran the `Application Key` using `getDeveloperAppKeys`
+ - Use the API visualiser to `createDeveloperAppKeys`, then grab the `Application Key` using `getDeveloperAppKeys`
  - Export the `SSOID` and `APP_KEY` to your environment. 
 
 ## Run MongoDB & Mongo Express UI & Exchange Recorder
