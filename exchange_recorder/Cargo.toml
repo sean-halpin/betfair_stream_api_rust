@@ -12,6 +12,8 @@ native-tls = "0.2.7"
 rocket = "0.4.7"
 lazy_static = "1.4.0"
 prometheus = "0.11.0"
+envconfig = "0.9.1"
+futures = "0.3.12"
 
 [dependencies.mongodb]
 version = "1.1.1"
