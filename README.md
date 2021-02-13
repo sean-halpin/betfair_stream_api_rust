@@ -18,7 +18,8 @@ You might want to record the exchange in order to build algorithmic trading mode
   - The connection to the Betfair exchange is a TLS secured TCP Stream
   - We send a custom Auth msg & a market Subscription msg
   - The exchange then starts sending CRLF delimited JSON payloads back to us
-  - These payloads contains Snapshots of the whole market & then Deltas from then on. 
+  - These payloads contain snapshots `IMG` of the whole market & then Deltas from then on.
+    - The deltas can be aggregated to form a material view of the current market
   - The service then places these into a Mongo DB Collection in order to record the feed. 
 - Containerised with Docker. 
 - Orchestrated with Docker-Compose.
