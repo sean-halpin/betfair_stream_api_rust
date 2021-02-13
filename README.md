@@ -1,3 +1,7 @@
+# Build Status
+
+[![Build Status](https://travis-ci.com/sean-halpin/betfair_stream_api_rust.svg?branch=master)](https://travis-ci.com/sean-halpin/betfair_stream_api_rust)
+
 # Overview
 
 This service is capable of recording Snapshots(`IMG`) and changes(`Deltas`) from the Betfair Sports Trading Exchange.
