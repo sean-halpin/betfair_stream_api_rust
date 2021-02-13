@@ -43,9 +43,7 @@ pub async fn subscribe(cfg: &AppConfig) {
     let market_id = &cfg.market_id;
     let stream = connect_betfair_tls_stream(&cfg).unwrap();
 
-    let client = Client::with_uri_str("mongodb://root:password123@0.0.0.0:27017/")
-        .await
-        .unwrap();
+    let client = Client::with_uri_str(&cfg.mongo_conn).await.unwrap();
     let db = client.database("betfair_exchange_db");
     let coll = db.collection(&market_id);
 

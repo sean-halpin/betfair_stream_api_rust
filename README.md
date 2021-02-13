@@ -27,8 +27,9 @@ Navigate to `https://docs.developer.betfair.com/visualisers/api-ng-account-opera
  - Export the `SSOID` and `APP_KEY` to your environment. 
 
 ## Run MongoDB & Mongo Express UI & Exchange Recorder
+
 ```
-docker-compose up
+docker-compose up 
 ```
 
 ## Run the Exchange Recorder Service Locally

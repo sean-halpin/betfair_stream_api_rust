@@ -12,4 +12,6 @@ pub struct AppConfig {
     pub stream_api_host: String,
     #[envconfig(from = "MARKET_ID", default = "1.142069XXX")]
     pub market_id: String,
+    #[envconfig(from = "MONGO_CONN", default = "mongodb://root:password123@0.0.0.0:27017/")]
+    pub mongo_conn: String,
 }
