@@ -1,46 +1,18 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 #[macro_use]
 extern crate rocket;
-mod app_config_load;
 mod betfair_tls_connect;
-use crate::app_config_load::AppConfig;
+mod config;
+mod metrics;
+use config::app_config_load::AppConfig;
 use envconfig::Envconfig;
-use lazy_static::lazy_static;
+use metrics::metrics_server::start_web_server;
+use metrics::metrics_statics::INCOMING_MESSAGES;
 use mongodb::{bson::doc, Client};
-use prometheus::{Encoder, IntCounter, Registry, TextEncoder};
 use std::io::BufRead;
 use std::io::BufReader;
 
-lazy_static! {
-    pub static ref INCOMING_MESSAGES: IntCounter =
-        IntCounter::new("incoming_messages", "Incoming Messages").expect("metric can be created");
-    pub static ref PROM_REGISTRY: Registry = Registry::new();
-}
-
-fn register_custom_metrics() {
-    PROM_REGISTRY
-        .register(Box::new(INCOMING_MESSAGES.clone()))
-        .expect("collector can be registered");
-}
-
-#[get("/")]
-fn metrics() -> String {
-    let mut buffer = vec![];
-    let encoder = TextEncoder::new();
-    let gathered = PROM_REGISTRY.gather();
-    encoder.encode(&gathered, &mut buffer).unwrap();
-
-    return String::from_utf8(buffer).unwrap();
-}
-
-async fn start_web_server(_cfg: &AppConfig) {
-    println!("Starting Prometheus Metrics Endpoint: http://localhost:8000/metrics");
-    rocket::ignite()
-        .mount("/metrics", routes![metrics])
-        .launch();
-}
-
-async fn subscribe_to_betfair_exchange(cfg: &app_config_load::AppConfig) {
+async fn subscribe_to_betfair_exchange(cfg: &AppConfig) {
     let market_id = &cfg.market_id;
     let stream = betfair_tls_connect::connect_betfair_tls_stream(&cfg).unwrap();
 
@@ -71,7 +43,6 @@ async fn main() {
         Err(_) => panic! {"Could not Load App Config"},
     };
 
-    register_custom_metrics();
     let moved_config = config.clone();
     tokio::spawn(async move { start_web_server(&moved_config).await });
     subscribe_to_betfair_exchange(&config).await;
