@@ -3,6 +3,6 @@ FROM rustlang/rust:nightly-buster
 WORKDIR /usr/src/app
 COPY exchange_recorder .
 
-RUN cargo install --path .
+RUN cargo install --jobs 2 --path .
 
 CMD ["exchange_recorder"]
