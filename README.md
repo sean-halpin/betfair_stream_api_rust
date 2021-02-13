@@ -4,7 +4,7 @@
 
 # Overview
 
-This service is capable of recording Snapshots(`IMG`) and changes(`Deltas`) from the Betfair Sports Trading Exchange.
+This service is capable of recording Snapshots(`IMG`) and changes(`Deltas`) from the [Betfair Sports Trading Exchange](https://www.betfair.com/exchange/plus/).
 
 Traditionally betting has occurred between a customer and a bookmaker where the customer 'backs' (bets that an outcome will occur) and the bookmaker 'lays' (bets that the outcome will not occur). Betting exchanges offer the opportunity for anyone to both back and lay. This is functionally similar to trading stocks. 
 
@@ -58,6 +58,7 @@ Available at `http://localhost:9081/`
 
 ## TODO
 
+- Add Logger with configurable levels, WARN/INFO/EROR
 - Add Tests
 - Helmify for Kubernetes deployment
 - Configure Mongo Replica Set for Redundancy & access to the `Change Stream`
