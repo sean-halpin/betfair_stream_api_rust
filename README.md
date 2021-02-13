@@ -26,13 +26,7 @@ Navigate to `https://docs.developer.betfair.com/visualisers/api-ng-account-opera
  - Use the API visualiser to `createDeveloperAppKeys`, then gran the `Application Key` using `getDeveloperAppKeys`
  - Export the `SSOID` and `APP_KEY` to your environment. 
 
-## Optional Build Exchange Recorder Docker Image
-
-```
-docker build -f ./Dockerfile.exchange_recorder_rust -t exch_rec .
-```
-
-## Run MongoDB & Mongo Express UI
+## Run MongoDB & Mongo Express UI & Exchange Recorder
 ```
 docker-compose up
 ```

@@ -1,6 +1,22 @@
 version: "3.6"
 
 services:
+  exchange_stream_recorder_rust:
+    build:
+      context: .
+      dockerfile: Dockerfile.exchange_stream_recorder_rust
+    image: exchange_stream_recorder_rust
+    restart: always
+    ports:
+      - 8000:8000
+    environment:
+      - APP_KEY=${APP_KEY}
+      - SSOID=${SSOID}
+      - MARKET_ID=${MARKET_ID}
+    depends_on:
+      - mongo-express
+
+  # Mongo UI
   mongo-express:
     image: mongo-express
     restart: always
