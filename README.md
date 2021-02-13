@@ -58,9 +58,7 @@ Available at `http://localhost:9081/`
 
 ## TODO
 
-- Split code into seperate modules
 - Add Tests
-- Add Travis build pipline
 - Helmify for Kubernetes deployment
 - Configure Mongo Replica Set for Redundancy & access to the `Change Stream`
 - Forward the change stream events to Kafka as a messaging layer to enable multiple consumers.
