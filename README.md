@@ -14,10 +14,10 @@ You might want to record the exchange in order to build algorithmic trading mode
 
 ## Technologies Used
 
-The Exchange Recorder is written in Rust.
-Containerised with Docker. 
-Orchestrated with Docker-Compose.
-Storage with MongoDB.
+- The Exchange Recorder is written in Rust.
+- Containerised with Docker. 
+- Orchestrated with Docker-Compose.
+- Storage with MongoDB.
 
 ## Create Exchange Keys & Export Environment Variables
 
