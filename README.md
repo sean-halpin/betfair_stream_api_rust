@@ -1,5 +1,7 @@
 # Build Status
 
+Using Travis CI to automatically build the service against Rust Nightly. 
+
 [![Build Status](https://travis-ci.com/sean-halpin/betfair_stream_api_rust.svg?branch=master)](https://travis-ci.com/sean-halpin/betfair_stream_api_rust)
 
 # Overview
