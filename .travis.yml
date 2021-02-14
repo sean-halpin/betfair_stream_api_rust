@@ -2,9 +2,7 @@ language: rust
 rust:
   - nightly
 jobs:
-  allow_failures:
-    - rust: nightly
   fast_finish: true
 script:
-  - cd exchange_recorder
   - cargo build --verbose
+  - cargo test --verbose

@@ -1,5 +1,5 @@
+use crate::config::app_config::AppConfig;
 use crate::metrics::metrics_statics::INCOMING_MESSAGES;
-use crate::AppConfig;
 use mongodb::{bson::doc, Client};
 use native_tls::TlsConnector;
 use native_tls::TlsStream;

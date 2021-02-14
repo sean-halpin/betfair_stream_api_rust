@@ -1,6 +1,6 @@
+use crate::config::app_config::AppConfig;
 use crate::metrics::metrics_statics::INCOMING_MESSAGES;
 use crate::metrics::metrics_statics::PROM_REGISTRY;
-use crate::AppConfig;
 use prometheus::{Encoder, TextEncoder};
 
 fn register_custom_metrics() {
