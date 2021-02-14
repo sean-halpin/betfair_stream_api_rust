@@ -33,7 +33,15 @@ mod tests {
 
     #[test]
     fn default_config_used() {
+        env::remove_var("SSOID");
+        env::remove_var("APP_KEY");
+        env::remove_var("STREAM_API_ENDPOINT");
+        env::remove_var("STREAM_API_HOST");
+        env::remove_var("MARKET_ID");
+        env::remove_var("MONGO_CONN");
+
         let app_config = load().unwrap();
+        
         assert_eq!(app_config.ssoid, "XXXX");
         assert_eq!(app_config.app_key, "XXXX");
         assert_eq!(app_config.stream_api_endpoint, "stream-api.betfair.com:443");
