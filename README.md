@@ -49,13 +49,14 @@ cargo build
 RUST_BACKTRACE=1 cargo run
 ```
 
-## Run MongoDB & Mongo Express UI & Exchange Recorder
+## Docker-Compose - Run MongoDB & Mongo Express UI & Exchange Recorder
 
 
 ```
 export SSOID=XXXXXXXXXXXXXXXXXXXXXXX
 export APP_KEY=XXXXXXXXXX
 export MARKET_ID=1.178839712
+
 docker-compose build
 docker-compose up 
 ```
