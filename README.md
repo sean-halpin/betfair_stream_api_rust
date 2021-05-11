@@ -38,12 +38,6 @@ Navigate to `https://docs.developer.betfair.com/visualisers/api-ng-account-opera
  - Use the API visualiser to `createDeveloperAppKeys`, then grab the `Application Key` using `getDeveloperAppKeys`
  - Export the `SSOID` and `APP_KEY` to your environment. 
 
-## Run MongoDB & Mongo Express UI & Exchange Recorder
-
-```
-docker-compose up 
-```
-
 ## Run the Exchange Recorder Service Locally
 
 Example;
@@ -53,6 +47,17 @@ export APP_KEY=XXXXXXXXXX
 export MARKET_ID=1.178839712
 cargo build
 RUST_BACKTRACE=1 cargo run
+```
+
+## Run MongoDB & Mongo Express UI & Exchange Recorder
+
+
+```
+export SSOID=XXXXXXXXXXXXXXXXXXXXXXX
+export APP_KEY=XXXXXXXXXX
+export MARKET_ID=1.178839712
+docker-compose build
+docker-compose up 
 ```
 
 ## Prometheus Metrics
