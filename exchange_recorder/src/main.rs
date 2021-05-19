@@ -4,6 +4,7 @@ extern crate rocket;
 mod config;
 mod exchange_recorder;
 mod metrics;
+mod model;
 use crate::exchange_recorder::exchange_subscribe_recorder::subscribe;
 use crate::metrics::metrics_server::start_web_server;
 
@@ -13,5 +14,6 @@ async fn main() {
 
     let moved_config = config.clone();
     tokio::spawn(async move { start_web_server(&moved_config).await });
-    subscribe(&config).await;
+
+    if let Err(e) = subscribe(&config).await { println!("{:?}", e) }
 }

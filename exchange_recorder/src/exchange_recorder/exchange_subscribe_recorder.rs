@@ -1,8 +1,10 @@
 use crate::config::app_config::AppConfig;
 use crate::metrics::metrics_statics::INCOMING_MESSAGES;
+use crate::model::stream::BetfairMessage;
 use mongodb::{bson::doc, Client};
 use native_tls::TlsConnector;
 use native_tls::TlsStream;
+use std::error::Error;
 use std::io::BufRead;
 use std::io::BufReader;
 use std::io::Write;
@@ -36,10 +38,10 @@ fn connect_betfair_tls_stream(cfg: &AppConfig) -> Result<TlsStream<TcpStream>, S
     tls_stream.write_all(auth_msg.as_bytes()).unwrap();
     tls_stream.write_all(sub_msg.as_bytes()).unwrap();
 
-    return Ok(tls_stream);
+    Ok(tls_stream)
 }
 
-pub async fn subscribe(cfg: &AppConfig) {
+pub async fn subscribe(cfg: &AppConfig) -> Result<(), Box<dyn Error>> {
     let market_id = &cfg.market_id;
     let stream = connect_betfair_tls_stream(&cfg).unwrap();
 
@@ -51,12 +53,20 @@ pub async fn subscribe(cfg: &AppConfig) {
     let mut buf = String::new();
     while stream_reader.read_line(&mut buf).unwrap_or(0) > 0 {
         INCOMING_MESSAGES.inc();
-        println!("{}", &buf);
-        let result = match coll.insert_one(doc! { "payload": &buf}, None).await {
+        let mongo_msg: BetfairMessage = match serde_json::from_str(&buf) {
+            Ok(m) => m,
+            Err(e) => {
+                println!("{}", e);
+                break;
+            }
+        };
+        let new_bson = bson::to_bson(&mongo_msg).unwrap();
+        let new_doc = doc! { "payload" : new_bson };
+        let result = match coll.insert_one(new_doc, None).await {
             Ok(_) => Ok("Inserted a document into MongoDB"),
             Err(e) => Err(e),
         };
-        println!("{:#?}", result);
         buf = "".to_string();
     }
+    Ok(())
 }

@@ -16,7 +16,7 @@ fn metrics() -> String {
     let gathered = PROM_REGISTRY.gather();
     encoder.encode(&gathered, &mut buffer).unwrap();
 
-    return String::from_utf8(buffer).unwrap();
+    String::from_utf8(buffer).unwrap()
 }
 
 pub async fn start_web_server(_cfg: &AppConfig) {
