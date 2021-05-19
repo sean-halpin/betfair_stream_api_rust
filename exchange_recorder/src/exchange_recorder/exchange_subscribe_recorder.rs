@@ -62,7 +62,7 @@ pub async fn subscribe(cfg: &AppConfig) -> Result<(), Box<dyn Error>> {
         };
         let new_bson = bson::to_bson(&mongo_msg).unwrap();
         let new_doc = doc! { "payload" : new_bson };
-        let result = match coll.insert_one(new_doc, None).await {
+        let _result = match coll.insert_one(new_doc, None).await {
             Ok(_) => Ok("Inserted a document into MongoDB"),
             Err(e) => Err(e),
         };

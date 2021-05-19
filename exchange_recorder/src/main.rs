@@ -15,5 +15,7 @@ async fn main() {
     let moved_config = config.clone();
     tokio::spawn(async move { start_web_server(&moved_config).await });
 
-    if let Err(e) = subscribe(&config).await { println!("{:?}", e) }
+    if let Err(e) = subscribe(&config).await {
+        println!("{:?}", e)
+    }
 }
