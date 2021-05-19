@@ -18,7 +18,6 @@ pub struct Id {
 #[cfg(test)]
 mod tests {
     use crate::model::mongo::MongoMessage;
-    use std::env;
     use std::fs::File;
     use std::io::{self, BufRead};
     use std::path::Path;
