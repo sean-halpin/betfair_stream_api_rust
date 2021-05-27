@@ -64,7 +64,11 @@ impl PriceCache {
                                         for r in rc.into_iter() {
                                             println!("RunnerId={:?}", r.id);
                                             if let Some(ref available_to_back) = r.atb {
-                                                println!("{:?}", available_to_back);
+                                                println!("ATB={:?}", available_to_back);
+                                                for atb_change in r.atb {}
+                                            }
+                                            if let Some(ref available_to_lay) = r.atl {
+                                                println!("ATL={:?}", available_to_lay);
                                             }
                                         }
                                     }
@@ -116,7 +120,9 @@ mod tests {
     fn it_works() {
         let mut pcache: PriceCache = Default::default();
         let lines = read_lines("../dumps/1.183738831").unwrap();
+        let mut msg_count = 0;
         for line in lines {
+            msg_count += 1;
             if let Ok(l) = line {
                 // println!("{}", l);
                 match serde_json::from_str::<MongoMessage>(&l) {
@@ -127,7 +133,7 @@ mod tests {
                         }
                     }
                     Err(e) => {
-                        println!("{}", e);
+                        println!("{} - {}", msg_count, e);
                         panic!();
                     }
                 };

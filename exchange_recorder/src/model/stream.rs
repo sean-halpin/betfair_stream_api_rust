@@ -1,3 +1,9 @@
+// #[macro_use]
+extern crate serde;
+extern crate serde_derive;
+extern crate serde_json;
+use std::collections::HashMap;
+
 #[derive(Default, Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BetfairMessage {
@@ -76,9 +82,12 @@ pub struct PriceLadderDefinition {
 #[derive(Default, Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Rc {
-    pub atb: Option<Vec<(f64, f64)>>,
-    pub atl: Option<Vec<(f64, f64)>>,
-    pub trd: Option<Vec<(f64, f64)>>,
+    #[serde(with = "price_ladder")]
+    pub atb: Option<HashMap<String, f64>>,
+    #[serde(with = "price_ladder")]
+    pub atl: Option<HashMap<String, f64>>,
+    #[serde(with = "price_ladder")]
+    pub trd: Option<HashMap<String, f64>>,
     pub spb: Option<Vec<(f64, f64)>>,
     pub spl: Option<Vec<(f64, f64)>>,
     pub batb: Option<Vec<(f64, f64, f64)>>,
@@ -90,4 +99,36 @@ pub struct Rc {
     pub ltp: Option<f64>,
     pub tv: Option<f64>,
     pub id: i64,
+}
+
+mod price_ladder {
+    use std::collections::HashMap;
+
+    use serde::de::{Deserialize, Deserializer};
+    use serde::ser::Serializer;
+
+    pub fn serialize<S>(
+        map: &Option<HashMap<String, f64>>,
+        serializer: S,
+    ) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.collect_seq(map.as_ref().unwrap().values())
+    }
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<Option<HashMap<String, f64>>, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let mut map = HashMap::new();
+        if let Ok(deser_values) = Vec::<(f64, f64)>::deserialize(deserializer) {
+            for item in deser_values {
+                map.insert(item.0.to_string(), item.1);
+            }
+            return Ok(Some(map));
+        } else {
+            return Ok(None);
+        }
+    }
 }
