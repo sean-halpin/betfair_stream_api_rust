@@ -56,6 +56,7 @@ pub async fn subscribe(cfg: &AppConfig) -> Result<(), Box<dyn Error>> {
         let mongo_msg: BetfairMessage = match serde_json::from_str(&buf) {
             Ok(m) => m,
             Err(e) => {
+                println!("{}", &buf);
                 println!("{}", e);
                 break;
             }

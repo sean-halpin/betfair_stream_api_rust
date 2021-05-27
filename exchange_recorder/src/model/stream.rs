@@ -76,21 +76,15 @@ pub struct PriceLadderDefinition {
 #[derive(Default, Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Rc {
-    #[serde(default)]
-    pub atb: Vec<Vec<f64>>,
-    #[serde(default)]
-    pub atl: Vec<Vec<f64>>,
-    #[serde(default)]
-    pub trd: Vec<Vec<f64>>,
-    #[serde(default)]
-    pub spb: Vec<Vec<f64>>,
-    #[serde(default)]
-    pub spl: Vec<Vec<f64>>,
-    pub batb: Option<Vec<Vec<f64>>>,
-    #[serde(default)]
-    pub batl: Vec<Vec<f64>>,
-    pub bdatb: Option<Vec<Vec<f64>>>,
-    pub bdatl: Option<Vec<Vec<f64>>>,
+    pub atb: Option<Vec<(f64, f64)>>,
+    pub atl: Option<Vec<(f64, f64)>>,
+    pub trd: Option<Vec<(f64, f64)>>,
+    pub spb: Option<Vec<(f64, f64)>>,
+    pub spl: Option<Vec<(f64, f64)>>,
+    pub batb: Option<Vec<(f64, f64, f64)>>,
+    pub batl: Option<Vec<(f64, f64, f64)>>,
+    pub bdatb: Option<Vec<(f64, f64, f64)>>,
+    pub bdatl: Option<Vec<(f64, f64, f64)>>,
     pub spn: Option<f64>,
     pub spf: Option<f64>,
     pub ltp: Option<f64>,
