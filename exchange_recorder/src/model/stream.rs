@@ -23,7 +23,8 @@ pub struct BetfairMessage {
 pub struct Mc {
     pub id: String,
     pub market_definition: Option<MarketDefinition>,
-    pub rc: Option<Vec<Rc>>,
+    #[serde(with = "runners")]
+    pub rc: Option<HashMap<String, Rc>>,
     pub img: Option<bool>,
     pub tv: Option<f64>,
 }
@@ -84,20 +85,20 @@ pub struct PriceLadderDefinition {
 pub struct Rc {
     #[serde(with = "price_ladder")]
     pub atb: Option<HashMap<String, f64>>,
-    #[serde(with = "price_ladder")]
-    pub atl: Option<HashMap<String, f64>>,
-    #[serde(with = "price_ladder")]
-    pub trd: Option<HashMap<String, f64>>,
-    pub spb: Option<Vec<(f64, f64)>>,
-    pub spl: Option<Vec<(f64, f64)>>,
-    pub batb: Option<Vec<(f64, f64, f64)>>,
-    pub batl: Option<Vec<(f64, f64, f64)>>,
-    pub bdatb: Option<Vec<(f64, f64, f64)>>,
-    pub bdatl: Option<Vec<(f64, f64, f64)>>,
-    pub spn: Option<f64>,
-    pub spf: Option<f64>,
-    pub ltp: Option<f64>,
-    pub tv: Option<f64>,
+    // #[serde(with = "price_ladder")]
+    // pub atl: Option<HashMap<String, f64>>,
+    // #[serde(with = "price_ladder")]
+    // pub trd: Option<HashMap<String, f64>>,
+    // pub spb: Option<Vec<(f64, f64)>>,
+    // pub spl: Option<Vec<(f64, f64)>>,
+    // pub batb: Option<Vec<(f64, f64, f64)>>,
+    // pub batl: Option<Vec<(f64, f64, f64)>>,
+    // pub bdatb: Option<Vec<(f64, f64, f64)>>,
+    // pub bdatl: Option<Vec<(f64, f64, f64)>>,
+    // pub spn: Option<f64>,
+    // pub spf: Option<f64>,
+    // pub ltp: Option<f64>,
+    // pub tv: Option<f64>,
     pub id: i64,
 }
 
@@ -126,9 +127,42 @@ mod price_ladder {
             for item in deser_values {
                 map.insert(item.0.to_string(), item.1);
             }
-            return Ok(Some(map));
+            Ok(Some(map))
         } else {
-            return Ok(None);
+            Ok(None)
+        }
+    }
+}
+
+mod runners {
+    use crate::model::stream::Rc;
+    use std::collections::HashMap;
+
+    use serde::de::{Deserialize, Deserializer};
+    use serde::ser::Serializer;
+
+    pub fn serialize<S>(
+        map: &Option<HashMap<String, Rc>>,
+        serializer: S,
+    ) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.collect_seq(map.as_ref().unwrap().values())
+    }
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<Option<HashMap<String, Rc>>, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let mut map = HashMap::new();
+        if let Ok(deser_values) = Vec::<Rc>::deserialize(deserializer) {
+            for item in deser_values {
+                map.insert(item.id.to_string(), item);
+            }
+            Ok(Some(map))
+        } else {
+            Ok(None)
         }
     }
 }
