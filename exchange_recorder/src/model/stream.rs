@@ -85,8 +85,8 @@ pub struct PriceLadderDefinition {
 pub struct Rc {
     #[serde(with = "price_ladder")]
     pub atb: Option<HashMap<String, f64>>,
-    // #[serde(with = "price_ladder")]
-    // pub atl: Option<HashMap<String, f64>>,
+    #[serde(with = "price_ladder")]
+    pub atl: Option<HashMap<String, f64>>,
     // #[serde(with = "price_ladder")]
     // pub trd: Option<HashMap<String, f64>>,
     // pub spb: Option<Vec<(f64, f64)>>,
