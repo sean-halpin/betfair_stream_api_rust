@@ -40,7 +40,7 @@ impl PriceCache {
                         publish_time / 1000,
                         ((publish_time % 1000) * 1000000) as u32,
                     );
-                    println!("mcm.pt={}", dt.to_rfc3339());
+                    // println!("mcm.pt={}", dt.to_rfc3339());
                 }
                 if let Some(msg_mc) = msg.mc {
                     for m in msg_mc.into_iter() {
@@ -59,42 +59,111 @@ impl PriceCache {
                         } else {
                             if let Some(msg_rc) = m.clone().rc {
                                 for msg_r in msg_rc.into_iter() {
-                                    if let Some(msg_r_atb) = msg_r.1.atb {
-                                        for msg_r_atb_price in msg_r_atb {
-                                            match self.cache.entry(mkt_id.clone()) {
-                                                Occupied(mut o) => {
-                                                    let cached_market = o.get_mut();
-                                                    let mut cloned_cached_market = cached_market.clone();
-                                                    if let Some(ref mut runners) = cloned_cached_market.rc{
-                                                        match runners.entry(msg_r.0.clone())
+                                    match self.cache.entry(mkt_id.clone()) {
+                                        Occupied(mut o) => {
+                                            let cached_market = o.get_mut();
+                                            let mut cloned_cached_market = cached_market.clone();
+                                            if let Some(ref mut runners) = cloned_cached_market.rc {
+                                                match runners.entry(msg_r.0.clone()) {
+                                                    Occupied(mut o) => {
+                                                        let cached_runner = o.get_mut();
+                                                        let mut cloned_cached_runner =
+                                                            cached_runner.clone();
+                                                        // Update ATB in cache
                                                         {
-                                                            Occupied(mut o) => {
-                                                                let cached_runner = o.get_mut();
-                                                                let mut cloned_cached_runner = cached_runner.clone();
-                                                                if let Some(ref mut cached_runner_atb) = cloned_cached_runner.atb{
-                                                                    match cached_runner_atb.entry(msg_r_atb_price.0.clone())
+                                                            if let Some(msg_r_att) = msg_r.1.atb {
+                                                                for msg_r_att_price in msg_r_att {
+                                                                    if let Some(
+                                                                        ref mut cached_runner_att,
+                                                                    ) = cloned_cached_runner.atb
                                                                     {
-                                                                        Occupied(mut o) => {
-                                                                            let atb = o.get_mut();
-                                                                            println!("ATB Price:{}, Amount:{}, UpdatedAmount:{}", msg_r_atb_price.0.clone(), atb, msg_r_atb_price.1);
-                                                                            *atb = msg_r_atb_price.1;
-                                                                        },
-                                                                        Vacant(v) => (),
+                                                                        match cached_runner_att
+                                                                            .entry(
+                                                                                msg_r_att_price
+                                                                                    .0
+                                                                                    .clone(),
+                                                                            ) {
+                                                                            Occupied(mut o) => {
+                                                                                let atb =
+                                                                                    o.get_mut();
+                                                                                // println!("ATB Price:{}, Amount:{}, UpdatedAmount:{}", msg_r_att_price.0.clone(), atb, msg_r_att_price.1);
+                                                                                *atb =
+                                                                                    msg_r_att_price
+                                                                                        .1;
+                                                                            }
+                                                                            Vacant(v) => (),
+                                                                        }
                                                                     }
                                                                 }
-                                                                *cached_runner = cloned_cached_runner;
-                                                            },
-                                                            Vacant(v) => (),
+                                                            }
                                                         }
+                                                        // Update ATL in cache
+                                                        {
+                                                            if let Some(msg_r_att) = msg_r.1.atl {
+                                                                for msg_r_att_price in msg_r_att {
+                                                                    if let Some(
+                                                                        ref mut cached_runner_att,
+                                                                    ) = cloned_cached_runner.atl
+                                                                    {
+                                                                        match cached_runner_att
+                                                                            .entry(
+                                                                                msg_r_att_price
+                                                                                    .0
+                                                                                    .clone(),
+                                                                            ) {
+                                                                            Occupied(mut o) => {
+                                                                                let atb =
+                                                                                    o.get_mut();
+                                                                                // println!("ATL Price:{}, Amount:{}, UpdatedAmount:{}", msg_r_att_price.0.clone(), atb, msg_r_att_price.1);
+                                                                                *atb =
+                                                                                    msg_r_att_price
+                                                                                        .1;
+                                                                            }
+                                                                            Vacant(v) => (),
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        // Update TRD in cache
+                                                        {
+                                                            if let Some(msg_r_att) = msg_r.1.trd {
+                                                                for msg_r_att_price in msg_r_att {
+                                                                    if let Some(
+                                                                        ref mut cached_runner_att,
+                                                                    ) = cloned_cached_runner.trd
+                                                                    {
+                                                                        match cached_runner_att
+                                                                            .entry(
+                                                                                msg_r_att_price
+                                                                                    .0
+                                                                                    .clone(),
+                                                                            ) {
+                                                                            Occupied(mut o) => {
+                                                                                let atb =
+                                                                                    o.get_mut();
+                                                                                println!("TRD Traded:{}, Amount:{}, UpdatedAmount:{}", msg_r_att_price.0.clone(), atb, msg_r_att_price.1);
+                                                                                *atb =
+                                                                                    msg_r_att_price
+                                                                                        .1;
+                                                                            }
+                                                                            Vacant(v) => (),
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        *cached_runner = cloned_cached_runner;
                                                     }
-                                                    *cached_market = cloned_cached_market;
+                                                    Vacant(v) => (),
                                                 }
-                                                Vacant(_e) => return Err(
-                                                    "Trying to update Market which does not exist in Cache"
-                                                        .into(),
-                                                ),
                                             }
+                                            *cached_market = cloned_cached_market;
                                         }
+                                        Vacant(_e) => return Err(
+                                            "Trying to update Market which does not exist in Cache"
+                                                .into(),
+                                        ),
                                     }
                                 }
                             }
