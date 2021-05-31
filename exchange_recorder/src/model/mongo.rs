@@ -84,10 +84,10 @@ impl PriceCache {
                                                                                     .clone(),
                                                                             ) {
                                                                             Occupied(mut o) => {
-                                                                                let atb =
+                                                                                let att =
                                                                                     o.get_mut();
-                                                                                // println!("ATB Price:{}, Amount:{}, UpdatedAmount:{}", msg_r_att_price.0.clone(), atb, msg_r_att_price.1);
-                                                                                *atb =
+                                                                                println!("ATB Price:{}, Amount:{}, UpdatedAmount:{}", msg_r_att_price.0.clone(), att, msg_r_att_price.1);
+                                                                                *att =
                                                                                     msg_r_att_price
                                                                                         .1;
                                                                             }
@@ -112,10 +112,10 @@ impl PriceCache {
                                                                                     .clone(),
                                                                             ) {
                                                                             Occupied(mut o) => {
-                                                                                let atb =
+                                                                                let att =
                                                                                     o.get_mut();
-                                                                                // println!("ATL Price:{}, Amount:{}, UpdatedAmount:{}", msg_r_att_price.0.clone(), atb, msg_r_att_price.1);
-                                                                                *atb =
+                                                                                println!("ATL Price:{}, Amount:{}, UpdatedAmount:{}", msg_r_att_price.0.clone(), att, msg_r_att_price.1);
+                                                                                *att =
                                                                                     msg_r_att_price
                                                                                         .1;
                                                                             }
@@ -140,10 +140,10 @@ impl PriceCache {
                                                                                     .clone(),
                                                                             ) {
                                                                             Occupied(mut o) => {
-                                                                                let atb =
+                                                                                let att =
                                                                                     o.get_mut();
-                                                                                println!("TRD Traded:{}, Amount:{}, UpdatedAmount:{}", msg_r_att_price.0.clone(), atb, msg_r_att_price.1);
-                                                                                *atb =
+                                                                                println!("TRD Traded:{}, Amount:{}, UpdatedAmount:{}", msg_r_att_price.0.clone(), att, msg_r_att_price.1);
+                                                                                *att =
                                                                                     msg_r_att_price
                                                                                         .1;
                                                                             }
